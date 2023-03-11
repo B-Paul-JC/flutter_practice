@@ -47,6 +47,7 @@ dependencies:
   firebase_core: ^2.7.1
   firebase_database: ^10.0.15
   cloud_firestore: ^4.4.4
+  flutter_staggered_animations: ^1.1.1
   firebase_analytics: ^10.1.5
 
 dev_dependencies:
