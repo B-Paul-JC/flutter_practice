@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'functions/basic.dart';
 import 'start/loading_view.dart';
 
 class InitialViews extends StatefulWidget {
@@ -22,27 +23,31 @@ class _InitialViewsState extends State<InitialViews> {
           case ConnectionState.active:
             if (user == null) {
               return const LoadingView(
-                loaded: Loader.loaded,
+                loaded: LoaderState.loaded,
               );
             }
             if (user.emailVerified) {
               Future.delayed(
                 const Duration(milliseconds: 1000),
-                () => ctxN.pushReplacementNamed("/home"),
+                () => ctxN.pushReplacementNamed(homeRoute),
               );
               return Container();
             } else {
               return const LoadingView(
-                loaded: Loader.loaded,
-                next: "/verify-email",
+                loaded: LoaderState.loaded,
+                next: verifyEmailRoute,
               );
             }
 
           case ConnectionState.none:
+            return const LoadingView(
+              next: "",
+              loaded: LoaderState.loadingError,
+            );
           default:
             return const LoadingView(
               next: "",
-              loaded: Loader.loadingError,
+              loaded: LoaderState.loaded,
             );
         }
       },

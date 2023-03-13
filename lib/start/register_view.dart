@@ -1,6 +1,7 @@
 import 'package:colours/colours.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../functions/basic.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -72,33 +73,20 @@ class _RegisterViewState extends State<RegisterView> {
             ElevatedButton(
               onPressed: !registering
                   ? () async {
-                      final email = _email.text;
-                      final password = _password.text;
-
-                      try {
-                        await FirebaseAuth.instance
-                            .createUserWithEmailAndPassword(
-                          email: email,
-                          password: password,
-                        );
-                        setState(() {
-                          registering = true;
-                        });
-                      } on FirebaseAuthException catch (e) {
-                        if (e.code != "unknown") {
-                          setState(() {
-                            errorText =
-                                e.code.replaceAll(r'-', " ").toUpperCase();
-                            registering = false;
-                          });
-                        } else {
-                          setState(() {
-                            registering = false;
-                            errorText =
-                                "It seems you've provided invalid credentials, such as empty text.";
-                          });
-                        }
-                      }
+                      setState(() {
+                        registering = true;
+                      });
+                      registerUser(
+                        context,
+                        RegistrationCredential(
+                          email: _email.text,
+                          password: _password.text,
+                        ),
+                      ).then(
+                        (value) => setState(() {
+                          registering = false;
+                        }),
+                      );
                     }
                   : null,
               style: ButtonStyle(

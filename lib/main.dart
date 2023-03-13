@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:colours/colours.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
+import 'functions/basic.dart';
 import 'start/register_view.dart';
 import 'start/login_view.dart';
 import 'host_screen.dart';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
 
   Route onGenerateRoutes(RouteSettings settings) {
     switch (settings.name) {
-      case "/login":
+      case loginRoute:
         return PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
               const HostPage(
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
           ),
           opaque: false,
         );
-      case "/register":
+      case registerRoute:
         return PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
               const HostPage(
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
           ),
           opaque: false,
         );
-      case "/home":
+      case homeRoute:
         return PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
               const HostPage(
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
           ),
           opaque: false,
         );
-      case "/verify-email":
+      case verifyEmailRoute:
         return PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
               const HostPage(
@@ -51,7 +52,7 @@ class MyApp extends StatelessWidget {
           ),
           opaque: false,
         );
-      case "/initial-screen":
+      case initialScreenRoute:
         return PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
               const HostPage(
@@ -60,7 +61,7 @@ class MyApp extends StatelessWidget {
           opaque: false,
         );
       default:
-        throw Exception("Route Not Found");
+        throw Exception("Route Not Found ${settings.name}");
     }
   }
 

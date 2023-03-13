@@ -1,9 +1,7 @@
-import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../start/loading_view.dart';
+import '../functions/basic.dart';
 
 class VerifyEmailView extends StatefulWidget {
   const VerifyEmailView({super.key});
@@ -13,27 +11,8 @@ class VerifyEmailView extends StatefulWidget {
 }
 
 class _VerifyEmailViewState extends State<VerifyEmailView> {
-  static User user = FirebaseAuth.instance.currentUser!;
   static String? email = FirebaseAuth.instance.currentUser?.email;
   static bool verifying = false;
-
-  StreamSubscription stream =
-      Stream.periodic(const Duration(milliseconds: 500), (i) {
-    user.reload();
-    if (user.emailVerified) {
-      return Stream.error("error");
-    } else {
-      return false;
-    }
-  }).listen((event) {
-    if (event == false) {}
-  });
-
-  @override
-  void dispose() {
-    stream.cancel();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,11 +49,14 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
             child: ElevatedButton(
               onPressed: !verifying
                   ? () {
-                      FirebaseAuth.instance.currentUser
-                          ?.sendEmailVerification();
                       setState(() {
                         verifying = true;
                       });
+                      verifyEmail(context).then(
+                        (value) => setState(() {
+                          verifying = false;
+                        }),
+                      );
                     }
                   : null,
               style: ButtonStyle(

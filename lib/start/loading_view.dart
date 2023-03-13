@@ -5,14 +5,8 @@ import 'package:rive/rive.dart';
 
 import '../functions/basic.dart';
 
-enum Loader {
-  loading,
-  loaded,
-  loadingError,
-}
-
 class LoadingView extends StatefulWidget {
-  final Loader loaded;
+  final LoaderState loaded;
   final String? next;
 
   const LoadingView({
@@ -36,9 +30,7 @@ class _LoadingViewState extends State<LoadingView> {
     child = Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const SizedBox(
-          height: 150,
-        ),
+        const SizedBox(height: 150),
         Center(
           child: Container(
             width: 250,
@@ -46,74 +38,41 @@ class _LoadingViewState extends State<LoadingView> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
             ),
-            child: Image.asset(
-              "assets/images/Spline.png",
-            ),
+            child: Image.asset(splineImage),
           ),
         ),
-        const SizedBox(
-          height: 150,
-        ),
+        const SizedBox(height: 150),
         Text(() {
-          if (widget.loaded == Loader.loadingError) {
+          if (widget.loaded == LoaderState.loadingError) {
             return "Loading Failed! Please re-install the app or contact support";
           }
           return "";
         }()),
-        const SizedBox(
-          height: 50,
-        ),
+        const SizedBox(height: 50),
         SizedBox(
           width: 80,
           height: 80,
-          child: RiveAnimation.asset(
-            "assets/RiveAssets/check.riv",
-            onInit: (Artboard artboard) {
-              StateMachineController? controller =
-                  StateMachineController.fromArtboard(
-                artboard,
-                'State Machine 1',
-              );
-
-              artboard.addController(controller!);
-              error = controller.findInput<bool>('Error') as SMITrigger;
-              success = controller.findInput<bool>('Check') as SMITrigger;
-              reset = controller.findInput<bool>('Reset') as SMITrigger;
-
-              Future.delayed(
-                const Duration(milliseconds: 1000),
-                () {
-                  if (widget.loaded == Loader.loaded) {
-                    success.fire();
-                  } else if (widget.loaded == Loader.loadingError) {
-                    error.fire();
-                  }
-                },
-              );
-            },
-          ),
+          child: RiveCheck(loader: widget.loaded),
         ),
         const SizedBox(
           height: 10,
         ),
         const Text("RexTem"),
-        const SizedBox(
-          height: 50,
-        ),
-        widget.loaded == Loader.loaded &&
+        const SizedBox(height: 50),
+        widget.loaded == LoaderState.loaded &&
                 FirebaseAuth.instance.currentUser == null
             ? Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   BButton(
                     onPressed: () {
-                      Navigator.of(context).pushNamed("/login");
+                      Navigator.of(context).pushNamed(loginRoute);
                     },
                     text: "Login",
                   ),
                   BButton(
                     onPressed: () {
-                      Navigator.of(context).pushNamed("/register");
+                      Navigator.of(context).pushNamed(registerRoute);
                     },
                     text: "Register",
                   ),

@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_practice/initializers.dart';
+import 'package:flutter_practice/functions/basic.dart';
 
 import 'firebase_options.dart';
 import 'start/loading_view.dart';
@@ -20,19 +20,19 @@ class HostScreen extends StatelessWidget {
         NavigatorState ctxN = Navigator.of(context);
         if (snapshot.hasError) {
           return const LoadingView(
-            loaded: Loader.loadingError,
+            loaded: LoaderState.loadingError,
           );
         }
         switch (snapshot.connectionState) {
           case ConnectionState.done:
             Future.delayed(const Duration(milliseconds: 500), () {
-              ctxN.pushReplacementNamed("/initial-screen");
+              ctxN.pushReplacementNamed(initialScreenRoute);
             });
             return const Scaffold();
           default:
             return const LoadingView(
               next: "",
-              loaded: Loader.loading,
+              loaded: LoaderState.loading,
             );
         }
       },

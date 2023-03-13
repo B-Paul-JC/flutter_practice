@@ -1,7 +1,7 @@
 import 'package:colours/colours.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_practice/functions/basic.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({
@@ -18,8 +18,6 @@ class _LoginViewState extends State<LoginView> {
   final FocusNode _focusNodeTwo = FocusNode();
   late final TextEditingController _email;
   late final TextEditingController _password;
-
-  static String errorText = "";
 
   @override
   void initState() {
@@ -75,35 +73,19 @@ class _LoginViewState extends State<LoginView> {
             ElevatedButton(
               onPressed: !loggingIn
                   ? () async {
-                      NavigatorState ctxN = Navigator.of(context);
-                      final email = _email.text;
-                      final password = _password.text;
-                      try {
-                        await FirebaseAuth.instance.signInWithEmailAndPassword(
-                          email: email,
-                          password: password,
-                        );
-
-                        ctxN.pop();
-                      } on FirebaseAuthException catch (e) {
-                        if (e.code != "unknown") {
-                          setState(() {
-                            loggingIn = false;
-                            errorText =
-                                e.code.replaceAll(r'-', " ").toUpperCase();
-                          });
-                        } else {
-                          setState(() {
-                            loggingIn = false;
-                            errorText =
-                                "It seems you've provided invalid credentials, such as empty text.";
-                          });
-                        }
-                      }
+                      loginUser(
+                        context,
+                        _email.text,
+                        _password.text,
+                      ).then(
+                        (value) => setState(() {
+                          loggingIn = false;
+                        }),
+                      );
                     }
                   : null,
               child: Text(
-                !loggingIn ? "Login" : "Logging",
+                !loggingIn ? "Login" : "Logging In...",
                 style: const TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.w500,
@@ -115,11 +97,6 @@ class _LoginViewState extends State<LoginView> {
             ),
             Center(
               child: loggingIn ? const CircularProgressIndicator() : null,
-            ),
-            Text(
-              errorText,
-              style: const TextStyle(color: Colours.red),
-              textAlign: TextAlign.center,
             ),
           ],
         ),
