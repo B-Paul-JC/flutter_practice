@@ -29,7 +29,7 @@ class _InitialViewsState extends State<InitialViews> {
             if (user.emailVerified) {
               Future.delayed(
                 const Duration(milliseconds: 1000),
-                () => ctxN.pushReplacementNamed(homeRoute),
+                () => ctxN.popAndPushNamed(homeRoute),
               );
               return Container();
             } else {

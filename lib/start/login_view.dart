@@ -40,9 +40,6 @@ class _LoginViewState extends State<LoginView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Login"),
-        systemOverlayStyle: SystemUiOverlayStyle(
-          systemNavigationBarColor: Colours.sandyBrown,
-        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -77,10 +74,6 @@ class _LoginViewState extends State<LoginView> {
                         context,
                         _email.text,
                         _password.text,
-                      ).then(
-                        (value) => setState(() {
-                          loggingIn = false;
-                        }),
                       );
                     }
                   : null,

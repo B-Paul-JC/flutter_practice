@@ -80,7 +80,6 @@ Future<void> showInfoDialog({
   required bool error,
 }) async {
   String? text = codeInterpretations[code];
-  log(code);
   return (await showDialog(
     context: context,
     builder: (context) =>
@@ -98,7 +97,6 @@ Future<void> loginUser(
       password: password,
     );
 
-    ctxN.pop();
     loginSuccessful = true;
   } on FirebaseAuthException catch (e) {
     showInfoDialog(
@@ -108,6 +106,7 @@ Future<void> loginUser(
     );
   }
   if (loginSuccessful) {
+    ctxN.pop();
     Future.delayed(
       const Duration(milliseconds: 100),
       () => showInfoDialog(
@@ -168,6 +167,9 @@ class RiveCheck extends StatefulWidget {
 }
 
 class _RiveCheckState extends State<RiveCheck> {
+  late final SMITrigger error;
+  late final SMITrigger success;
+
   void riveInit(Artboard artboard, LoaderState isOkay, {int? delay = 1000}) {
     StateMachineController? controller = StateMachineController.fromArtboard(
       artboard,
@@ -175,8 +177,11 @@ class _RiveCheckState extends State<RiveCheck> {
     );
 
     artboard.addController(controller!);
-    SMITrigger error = controller.findInput<bool>('Error') as SMITrigger;
-    SMITrigger success = controller.findInput<bool>('Check') as SMITrigger;
+
+    setState(() {
+      error = controller.findInput<bool>('Error') as SMITrigger;
+      success = controller.findInput<bool>('Check') as SMITrigger;
+    });
 
     Future.delayed(
       Duration(milliseconds: delay!),
